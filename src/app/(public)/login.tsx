@@ -1,4 +1,4 @@
-import { colors } from '@/constants/colors'
+import { LinearGradient } from 'expo-linear-gradient'
 import {
   Image,
   StyleSheet,
@@ -9,25 +9,42 @@ import {
 } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
+import { colors, gradients } from '@/constants/colors'
+
 export default function Login() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
         <View style={styles.logoContainer}>
-          <Image style={styles.logo} source={require('@/assets/Logo.png')} resizeMode="contain" />
+          <Image
+            style={styles.logo}
+            source={require('@/assets/Logo.png')}
+            resizeMode="contain"
+          />
         </View>
 
         <View style={styles.titleContainer}>
           <Text style={styles.title}>memory game</Text>
-          <Text style={styles.subtitle}>Teste sua memória enquanto aprende!</Text>
+          <Text style={styles.subtitle}>
+            Teste sua memória enquanto aprende!
+          </Text>
         </View>
 
         <View style={styles.formContainer}>
           <TextInput />
 
-          <TouchableOpacity>
-            <Text style={styles.buttonText}>Entrar</Text>
-          </TouchableOpacity>
+          <View style={styles.buttonGlow}>
+            <LinearGradient
+              colors={gradients.colorful}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 2 }}
+              style={styles.buttonGradient}
+            >
+              <TouchableOpacity style={styles.button}>
+                <Text style={styles.buttonText}>Entrar</Text>
+              </TouchableOpacity>
+            </LinearGradient>
+          </View>
         </View>
       </View>
     </SafeAreaView>
@@ -60,7 +77,7 @@ const styles = StyleSheet.create({
     fontSize: 28,
     color: colors.grayscale.gray100,
     fontWeight: '800',
-    marginBottom: 8
+    marginBottom: 8,
   },
   subtitle: {
     fontSize: 16,
@@ -74,5 +91,20 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: colors.grayscale.white,
-  }
+  },
+  buttonGradient: {
+    borderRadius: 50,
+  },
+  button: {
+    paddingVertical: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buttonGlow: {
+    shadowColor: colors.accent.purple,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.8,
+    shadowRadius: 20,
+    elevation: 15,
+  },
 })

@@ -1,11 +1,9 @@
 {
   "extends": ["@arthurrios/biome-config/react"],
-  "linter": {
-    "assist": {
-      "actions": {
-        "source": {
-          "organizeImports": "off"
-        }
+  "assist": {
+    "actions": {
+      "source": {
+        "organizeImports": "on"
       }
     }
   }
