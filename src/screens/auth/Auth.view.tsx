@@ -1,20 +1,25 @@
+import { useInputFocusAnimation } from '@/animations/hooks/useInputFocusAnimation'
 import { usePressAnimation } from '@/animations/hooks/usePressAnimation'
 import { colors, gradients } from '@/constants/colors'
 import { LinearGradient } from 'expo-linear-gradient'
 import { FC } from 'react'
 import {
   Image,
+  Keyboard,
   KeyboardAvoidingView,
   Platform,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   View,
 } from 'react-native'
 import Animated from 'react-native-reanimated'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useAuthViewModel } from './useAuth.viewModel'
+
+const AnimatedTextInput = Animated.createAnimatedComponent(TextInput)
 
 export const AuthView: FC<ReturnType<typeof useAuthViewModel>> = ({
   username,
@@ -22,20 +27,22 @@ export const AuthView: FC<ReturnType<typeof useAuthViewModel>> = ({
   handleSubmit,
 }) => {
   const handleSubmitPressAnimation = usePressAnimation()
+  const animatedTextInputAnimation = useInputFocusAnimation()
 
   return (
-    <SafeAreaView style={styles.container}>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-        style={{ flex: 1 }}
-      >
-        <View style={styles.content}>
-          <View style={styles.logoContainer}>
-            <Image
-              style={styles.logo}
-              source={require('@/assets/Logo.png')}
-              resizeMode="contain"
-            />
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      style={{ flex: 1 }}
+    >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <SafeAreaView style={styles.container}>
+          <View style={styles.content}>
+            <View style={styles.logoContainer}>
+              <Image
+                style={styles.logo}
+                source={require('@/assets/Logo.png')}
+                resizeMode="contain"
+              />
           </View>
 
           <View style={styles.titleContainer}>
@@ -46,15 +53,17 @@ export const AuthView: FC<ReturnType<typeof useAuthViewModel>> = ({
           </View>
 
           <View style={styles.formContainer}>
-            <TextInput
+            <AnimatedTextInput
               value={username}
               onChangeText={setUsername}
               placeholder="Digite seu nome"
-              style={styles.input}
+              style={[styles.input, animatedTextInputAnimation.animatedStyle]}
               placeholderTextColor={colors.grayscale.gray300}
               textAlign="center"
               autoCapitalize="words"
               returnKeyType="done"
+              onFocus={animatedTextInputAnimation.onFocus}
+              onBlur={animatedTextInputAnimation.onBlur}
             />
 
             <View style={styles.buttonGlow}>
@@ -78,8 +87,9 @@ export const AuthView: FC<ReturnType<typeof useAuthViewModel>> = ({
             </View>
           </View>
         </View>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+        </SafeAreaView>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   )
 }
 
