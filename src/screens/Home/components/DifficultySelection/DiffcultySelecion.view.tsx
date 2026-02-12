@@ -7,7 +7,8 @@ import { DifficultyIconView } from './DifficultyIcon/DifficultyIcon.view'
 import { useDifficultyViewModel } from './useDifficulty.viewModel'
 
 export const DifficultySelectionView = () => {
-  const { difficulties } = useDifficultyViewModel()
+  const { difficulties, selectedDifficulty, setSelectedDifficulty } =
+    useDifficultyViewModel()
   return (
     <View style={styles.difficultySection}>
       <View style={styles.difficultyHeader}>
@@ -27,13 +28,14 @@ export const DifficultySelectionView = () => {
           <Pressable
             style={styles.difficultyTab}
             key={`difficulty-key-${difficulty}`}
+            onPress={() => setSelectedDifficulty(difficulty)}
           >
             <View style={styles.difficultyBadge}>
               <DifficultyIconView
                 color={getDifficultyColor(difficulty)}
                 difficulty={difficulty}
                 inactiveColor={colors.grayscale.gray200}
-                isSelected
+                isSelected={selectedDifficulty === difficulty}
               />
               <AppText>{difficulty}</AppText>
             </View>
