@@ -24,7 +24,11 @@ export const ChallengeCard: FC<ChallengeTheme> = ({
       style={styles.challengeCard}
     >
       <Animated.View style={pressAnimation.animatedStyle}>
-        <Pressable style={styles.challengeContent}>
+        <Pressable
+          onPressIn={pressAnimation.onPressIn}
+          onPressOut={pressAnimation.onPressOut}
+          style={styles.challengeContent}
+        >
           <AppText style={styles.challengeTitle}>{title}</AppText>
           <View style={[styles.arrowButton, { backgroundColor: arrowColor }]}>
             <MaterialCommunityIcons name="arrow-right" size={24} />
