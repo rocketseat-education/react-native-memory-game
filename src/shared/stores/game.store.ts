@@ -123,6 +123,16 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   // Preview de Cartas
-  previewAllCards: () => {},
-  hideAllCards: () => {},
+  hideAllCards: () => {
+    const currentState = get()
+
+    const flippedCards = GameService.hideAllCards(currentState.cards)
+    set({ cards: flippedCards })
+  },
+  previewAllCards: () => {
+    const currentState = get()
+
+    const previewedCards = GameService.previewAllCards(currentState.cards)
+    set({ cards: previewedCards })
+  },
 }))
