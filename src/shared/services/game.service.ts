@@ -118,4 +118,22 @@ export class GameService {
       selectedCards: [],
     }
   }
+
+  static pauseGame(gameState: GameState): GameState {
+    return {
+      ...gameState,
+      status: 'paused',
+    }
+  }
+
+  static resumeGame(gameState: GameState): GameState {
+    return {
+      ...gameState,
+      status: 'playing',
+    }
+  }
+
+  static resetGame(challenge: Challenge): GameState {
+    return this.initializeGame(challenge)
+  }
 }
