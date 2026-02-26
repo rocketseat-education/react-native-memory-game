@@ -7,6 +7,19 @@ interface GameStore extends GameState {
   selectCard: (id: string) => void
   resetMismatchedCards: () => void
   finishGame: () => GameResult | null
+  tick: () => void
+  _timerId: number | null
+
+  startTimer: () => void
+  stopTimer: () => void
+
+  pauseGame: () => void
+  resumeGame: () => void
+  resetGame: () => void
+  clearGame: () => void
+
+  previewAllCards: () => void
+  hideAllCards: () => void
 }
 
 export const useGameStore = create<GameStore>((set, get) => ({
@@ -23,4 +36,20 @@ export const useGameStore = create<GameStore>((set, get) => ({
   resetMismatchedCards: () => {},
   selectCard: (cardId: string) => {},
   startGame: () => {},
+
+  // timer
+  tick: () => {},
+  startTimer: () => {},
+  stopTimer: () => {},
+  _timerId: null,
+
+  // Ciclo de vida
+  clearGame: () => {},
+  pauseGame: () => {},
+  resumeGame: () => {},
+  resetGame: () => {},
+
+  // Preview de Cartas
+  previewAllCards: () => {},
+  hideAllCards: () => {},
 }))
