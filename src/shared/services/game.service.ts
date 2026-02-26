@@ -99,4 +99,23 @@ export class GameService {
       }
     }
   }
+
+  static resetMismatchedCards(gameState: GameState): GameState {
+    const { cards, selectedCards } = gameState
+
+    const updatedCards = cards.map((card) => {
+      const isSelected = selectedCards.some(({ id }) => card.id === id)
+      if (isSelected && !card.isMatched) {
+        return CardService.flipCard(card, false)
+      } else {
+        return card
+      }
+    })
+
+    return {
+      ...gameState,
+      cards: updatedCards,
+      selectedCards: [],
+    }
+  }
 }
