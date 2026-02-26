@@ -55,9 +55,36 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   // timer
-  tick: () => {},
-  startTimer: () => {},
-  stopTimer: () => {},
+  tick: () => {
+    const currentState = get()
+    const newState = GameService.tick(currentState)
+    set(newState)
+
+    if (newState.status === 'timeout') {
+      get().stopTimer()
+    }
+  },
+  startTimer: () => {
+    const currentState = get()
+
+    if (currentState._timerId) {
+      clearInterval(currentState._timerId)
+    }
+
+    const timerId = setInterval(() => {
+      get().tick()
+    }, 1000)
+
+    set({ _timerId: timerId })
+  },
+  stopTimer: () => {
+    const currentState = get()
+
+    if (currentState._timerId) {
+      clearInterval(currentState._timerId)
+      set({ _timerId: null })
+    }
+  },
   _timerId: null,
 
   // Ciclo de vida
