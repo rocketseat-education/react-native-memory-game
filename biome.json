@@ -10,7 +10,8 @@
   "linter": {
     "rules": {
       "complexity": {
-        "noStaticOnlyClass": "off"
+        "noStaticOnlyClass": "off",
+        "noThisInStatic": "off"
       }
     }
   }
