@@ -102,7 +102,7 @@ export interface StoreCard extends CardItem {
 export type GameState = {
   status: GameStatus
   challenge: Challenge | null
-  selectedCards: CardItem[]
+  selectedCards: StoreCard[]
   timeRemaining: number
   timeElapsed: number
   startedAt: Date | null
