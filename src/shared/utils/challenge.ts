@@ -75,6 +75,30 @@ export const challengeTheme: ChallengeTheme[] = [
   },
 ]
 
+export interface DifficultyConfig {
+  difficulty: Difficulty
+  timeLimit: number
+  estimatedTime: string
+}
+
+export const difficultyConfigs: Record<Difficulty, DifficultyConfig> = {
+  Fácil: {
+    difficulty: 'Fácil',
+    timeLimit: 300,
+    estimatedTime: '5 min',
+  },
+  Médio: {
+    difficulty: 'Médio',
+    timeLimit: 240,
+    estimatedTime: '4 min',
+  },
+  Difícil: {
+    difficulty: 'Difícil',
+    timeLimit: 30,
+    estimatedTime: '3 min',
+  },
+}
+
 export type GameStatus =
   | 'idle'
   | 'countdown'
