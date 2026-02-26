@@ -1,4 +1,4 @@
-import { Challenge, GameState } from '../utils/challenge'
+import { Challenge, GameResult, GameState } from '../utils/challenge'
 import { CardService } from './card.service'
 
 export class GameService {
@@ -135,5 +135,33 @@ export class GameService {
 
   static resetGame(challenge: Challenge): GameState {
     return this.initializeGame(challenge)
+  }
+
+  static tick(gameState: GameState): GameState {
+    if (gameState.status !== 'playing') {
+      return gameState
+    }
+
+    const timeRemaining = Math.max(0, gameState.timeRemaining - 1)
+    const timeElapsed = gameState.timeElapsed + 1
+
+    return {
+      ...gameState,
+      timeElapsed,
+      timeRemaining,
+      status: timeRemaining === 0 ? 'timeout' : gameState.status,
+    }
+  }
+
+  static finishGame(gameState: GameState): GameResult | null {
+    if (!gameState.challenge) {
+      return null
+    }
+
+    return {
+      completed: gameState.status === 'finished',
+      timeElapsed: gameState.timeElapsed,
+      challenge: gameState.challenge,
+    }
   }
 }
