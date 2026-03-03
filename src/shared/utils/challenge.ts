@@ -4,7 +4,7 @@ import { Difficulty } from '../interfaces/difficulty'
 
 export interface CardItem {
   name: string
-  image?: ImageSourcePropType
+  image: ImageSourcePropType
 }
 
 export interface ChallengeTheme {
