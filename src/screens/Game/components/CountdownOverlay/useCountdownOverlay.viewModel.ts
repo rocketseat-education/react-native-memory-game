@@ -1,10 +1,11 @@
-import { useGameStore } from '@/shared/stores/game.store'
 import { useEffect, useState } from 'react'
+import { CountdownOverlayProps } from '.'
 
-export const useCountdownOverlayViewModel = () => {
+export const useCountdownOverlayViewModel = ({
+  countdownVisible: visible,
+  onComplete,
+}: CountdownOverlayProps) => {
   const [count, setCount] = useState(3)
-  const { status } = useGameStore()
-  const visible = status === 'countdown'
 
   useEffect(() => {
     if (visible) {
@@ -18,12 +19,13 @@ export const useCountdownOverlayViewModel = () => {
           setCount(currentCount)
         } else {
           clearInterval(countdown)
+          onComplete()
         }
       }, 1000)
 
       return () => clearInterval(countdown)
     }
-  }, [setCount, visible])
+  }, [setCount, visible, onComplete])
 
-  return { count }
+  return { count, visible }
 }

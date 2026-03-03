@@ -5,7 +5,8 @@ import { useCountdownOverlayViewModel } from './useCountdownOverlay.viewModel'
 
 export const CountdownOverlayView: FC<
   ReturnType<typeof useCountdownOverlayViewModel>
-> = ({ count }) => {
+> = ({ count, visible }) => {
+  if (!visible) return
   return (
     <View style={styles.container}>
       <View style={styles.contentWrapper}>

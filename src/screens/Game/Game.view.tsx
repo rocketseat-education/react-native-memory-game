@@ -6,7 +6,8 @@ import { CountdownOverlay } from './components/CountdownOverlay'
 import { useGameViewModel } from './useGame.viewModel'
 
 export const GameView = () => {
-  const { selectedTheme } = useGameViewModel()
+  const { selectedTheme, countdownVisible, handleCountdownComplete } =
+    useGameViewModel()
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.gameInfo}>
@@ -15,7 +16,10 @@ export const GameView = () => {
           Encontre todos os pares dentro do tempo!
         </AppText>
       </View>
-      <CountdownOverlay />
+      <CountdownOverlay
+        countdownVisible={countdownVisible}
+        onComplete={handleCountdownComplete}
+      />
     </SafeAreaView>
   )
 }
