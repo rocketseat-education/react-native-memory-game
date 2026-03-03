@@ -1,3 +1,5 @@
+import { useAnimationStore } from '@/animations/store/animation.store'
+import { getEntryAnimationDuration } from '@/animations/utils/animation.utils'
 import { Difficulty } from '@/shared/interfaces/difficulty'
 import { useGameStore } from '@/shared/stores/game.store'
 import { challengeTheme, difficultyConfigs } from '@/shared/utils/challenge'
@@ -11,8 +13,10 @@ export const useGameViewModel = () => {
     difficulty: Difficulty
   }>()
 
-  const { initGame, status, previewAllCards, hideAllCards, startGame } =
+  const { initGame, status, previewAllCards, hideAllCards, startGame, cards } =
     useGameStore()
+
+  const { entryAnimationType } = useAnimationStore()
 
   const [countdownVisible, setCountdownVisible] = useState(
     status === 'countdown',
@@ -23,8 +27,13 @@ export const useGameViewModel = () => {
   const handleCountdownComplete = useCallback(() => {
     setCountdownVisible(false)
 
+    const totalAnimationTime = getEntryAnimationDuration(
+      cards.length,
+      entryAnimationType,
+    )
+
     createSequence()
-      .wait(2000)
+      .wait(totalAnimationTime)
       .then(previewAllCards)
       .wait(2000)
       .then(hideAllCards)
