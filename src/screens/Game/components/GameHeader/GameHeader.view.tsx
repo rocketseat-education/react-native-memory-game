@@ -9,7 +9,7 @@ import { useGameHeaderViewModel } from './useGameHeader.viewModel'
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 
 export const GameHeaderView = () => {
-  const {} = useGameHeaderViewModel()
+  const { timeString, isCriticalTime } = useGameHeaderViewModel()
 
   const { animatedStyle, onPressIn, onPressOut } = usePressAnimation({
     scaleActive: 0.8,
@@ -33,9 +33,13 @@ export const GameHeaderView = () => {
         <MaterialCommunityIcons
           name="clock-outline"
           size={20}
-          color={colors.semantic.warning}
+          color={isCriticalTime ? colors.feedback.danger : colors.feedback.info}
         />
-        <AppText>1</AppText>
+        <AppText
+          style={[styles.timerText, isCriticalTime && styles.timerTextCritical]}
+        >
+          {timeString}
+        </AppText>
       </Animated.View>
     </View>
   )
@@ -56,6 +60,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: colors.grayscale.gray500,
+    borderWidth: 1,
+    borderColor: colors.grayscale.gray400,
   },
   timerContainer: {
     flexDirection: 'row',
@@ -63,7 +69,17 @@ const styles = StyleSheet.create({
     backgroundColor: colors.grayscale.gray500,
     paddingHorizontal: 20,
     paddingVertical: 12,
-    borderRadius: 24,
+    borderRadius: 999,
     gap: 8,
+    borderWidth: 1,
+    borderColor: colors.grayscale.gray400,
+  },
+  timerText: {
+    fontSize: 16,
+    fontFamily: 'Baloo2_700Bold',
+    color: colors.feedback.info,
+  },
+  timerTextCritical: {
+    color: colors.feedback.danger,
   },
 })
