@@ -1,5 +1,6 @@
 import { useCardEntryAnimation } from '@/animations/hooks/useCardEntryAnimation'
 import { useCardShakeAnimation } from '@/animations/hooks/useCardShakeAnimation'
+import { useCardSuccessAnimation } from '@/animations/hooks/useCardSuccessAnimation'
 import { useGameStore } from '@/shared/stores/game.store'
 import { StoreCard } from '@/shared/utils/challenge'
 import { useEffect, useRef } from 'react'
@@ -23,6 +24,12 @@ export const useGameCardViewModel = ({ card, index }: Props) => {
   const entry = useCardEntryAnimation({ cardIndex: index })
 
   const { animatedStyle: shakeAnimatedStyle, onShake } = useCardShakeAnimation()
+
+  const {
+    animatedStyle: successAnimatedStyle,
+    playSuccessAnimation,
+    fadeOutSuccessAnimation,
+  } = useCardSuccessAnimation()
 
   const previousFlippedRef = useRef(card.isFlipped)
 
@@ -51,6 +58,16 @@ export const useGameCardViewModel = ({ card, index }: Props) => {
     previousFlippedRef.current = card.isFlipped
   }, [card.isFlipped, onShake, previousFlippedRef])
 
+  useEffect(() => {
+    if (card.isMatched) {
+      playSuccessAnimation()
+
+      setTimeout(() => {
+        fadeOutSuccessAnimation()
+      }, 600)
+    }
+  }, [card.isMatched, playSuccessAnimation])
+
   return {
     card,
     frontAnimatedStyle,
@@ -58,5 +75,6 @@ export const useGameCardViewModel = ({ card, index }: Props) => {
     selectCard,
     entry,
     shakeAnimatedStyle,
+    successAnimatedStyle,
   }
 }
