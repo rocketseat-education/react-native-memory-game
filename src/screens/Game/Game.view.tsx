@@ -14,6 +14,9 @@ export const GameView = () => {
     countdownVisible,
     handleCountdownComplete,
     handleGoBack,
+    isTimeoutModalVisible,
+    handleTryAgain,
+    handleExit,
   } = useGameViewModel()
   return (
     <SafeAreaView style={styles.container}>
@@ -32,9 +35,9 @@ export const GameView = () => {
       />
 
       <DefeatModalView
-        visible={true}
-        onTryAgain={() => {}}
-        onGoHome={() => {}}
+        visible={isTimeoutModalVisible}
+        onTryAgain={handleTryAgain}
+        onGoHome={handleExit}
       />
     </SafeAreaView>
   )

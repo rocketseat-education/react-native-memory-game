@@ -23,7 +23,7 @@ export const DefeatModalView: FC<Params> = ({
     <Modal visible={visible} transparent>
       <BlurView intensity={10} tint="dark" style={styles.overlay}>
         <Animated.View style={[animatedStyle, styles.modalContainer]}>
-          <Pressable style={styles.closeButton}>
+          <Pressable style={styles.closeButton} onPress={onGoHome}>
             <MaterialCommunityIcons
               name="close"
               size={20}
@@ -43,7 +43,7 @@ export const DefeatModalView: FC<Params> = ({
             O tempo para finalizar o desafio terminou. Que tal tentar de novo?
           </AppText>
 
-          <Pressable style={styles.button}>
+          <Pressable style={styles.button} onPress={onTryAgain}>
             <AppText style={styles.buttonText}>Jogar novamente</AppText>
           </Pressable>
         </Animated.View>

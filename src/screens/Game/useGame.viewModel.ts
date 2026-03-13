@@ -1,6 +1,9 @@
 import { CardEntryAnimationType } from '@/animations/config/animation.config'
 import { useAnimationStore } from '@/animations/store/animation.store'
-import { getEntryAnimationDuration } from '@/animations/utils/animation.utils'
+import {
+  getEntryAnimationDuration,
+  getFallAnimationDuration,
+} from '@/animations/utils/animation.utils'
 import { Difficulty } from '@/shared/interfaces/difficulty'
 import { useGameStore } from '@/shared/stores/game.store'
 import { challengeTheme, difficultyConfigs } from '@/shared/utils/challenge'
@@ -14,8 +17,15 @@ export const useGameViewModel = () => {
     difficulty: Difficulty
   }>()
 
-  const { initGame, status, previewAllCards, hideAllCards, startGame, cards } =
-    useGameStore()
+  const {
+    initGame,
+    status,
+    previewAllCards,
+    hideAllCards,
+    startGame,
+    cards,
+    resetGame,
+  } = useGameStore()
 
   const { entryAnimationType, setShouldAnimate, setEntryAnimationType } =
     useAnimationStore()
@@ -23,6 +33,7 @@ export const useGameViewModel = () => {
   const [countdownVisible, setCountdownVisible] = useState(
     status === 'countdown',
   )
+  const [isTimeoutModalVisible, setIsTimeoutModalVisible] = useState(false)
 
   const selectedTheme = challengeTheme.find((theme) => theme.id === themeId)
 
@@ -89,14 +100,48 @@ export const useGameViewModel = () => {
     themeId,
   ])
 
+  const handleTryAgain = useCallback(() => {
+    setIsTimeoutModalVisible(false)
+    resetGame()
+
+    createSequence()
+      .wait(300)
+      .then(() => setCountdownVisible(true))
+      .run()
+  }, [resetGame, setCountdownVisible])
+
   const handleGoBack = () => {
     router.back()
   }
+
+  const handleExit = useCallback(() => {
+    setIsTimeoutModalVisible(false)
+
+    createSequence()
+      .wait(200)
+      .then(() => router.replace('/(private)/home'))
+      .run()
+  }, [])
+
+  useEffect(() => {
+    if (status === 'finished') {
+      // TODO: Implement victory modal
+    }
+    if (status === 'timeout') {
+      createSequence()
+        .wait(getFallAnimationDuration())
+        .then(() => setIsTimeoutModalVisible(true))
+        .run()
+    }
+  }, [status])
 
   return {
     selectedTheme,
     countdownVisible,
     handleCountdownComplete,
     handleGoBack,
+    isTimeoutModalVisible,
+    handleTryAgain,
+    handleExit,
   }
 }
