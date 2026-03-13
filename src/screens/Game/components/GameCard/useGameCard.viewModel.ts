@@ -1,6 +1,7 @@
 import { useCardEntryAnimation } from '@/animations/hooks/useCardEntryAnimation'
 import { useCardShakeAnimation } from '@/animations/hooks/useCardShakeAnimation'
 import { useCardSuccessAnimation } from '@/animations/hooks/useCardSuccessAnimation'
+import { useCardTimeoutAnimation } from '@/animations/hooks/useCardTimeoutAnimation'
 import { useGameStore } from '@/shared/stores/game.store'
 import { StoreCard } from '@/shared/utils/challenge'
 import { useEffect, useRef } from 'react'
@@ -19,7 +20,7 @@ interface Props {
 export const useGameCardViewModel = ({ card, index }: Props) => {
   const rotation = useSharedValue(card.isFlipped ? 180 : 0)
 
-  const { selectCard } = useGameStore()
+  const { selectCard, status } = useGameStore()
 
   const entry = useCardEntryAnimation({ cardIndex: index })
 
@@ -30,6 +31,9 @@ export const useGameCardViewModel = ({ card, index }: Props) => {
     playSuccessAnimation,
     fadeOutSuccessAnimation,
   } = useCardSuccessAnimation()
+
+  const { animatedStyle: timeoutAnimatedStyle, fallAnimation } =
+    useCardTimeoutAnimation()
 
   const previousFlippedRef = useRef(card.isFlipped)
 
@@ -66,7 +70,14 @@ export const useGameCardViewModel = ({ card, index }: Props) => {
         fadeOutSuccessAnimation()
       }, 600)
     }
-  }, [card.isMatched, playSuccessAnimation])
+  }, [card.isMatched, playSuccessAnimation, fadeOutSuccessAnimation])
+
+  useEffect(() => {
+    if (status === 'timeout' && !card.isMatched) {
+      const randomDelay = Math.random() * 200
+      fallAnimation(randomDelay)
+    }
+  }, [status, card.isMatched, fallAnimation])
 
   return {
     card,
@@ -76,5 +87,6 @@ export const useGameCardViewModel = ({ card, index }: Props) => {
     entry,
     shakeAnimatedStyle,
     successAnimatedStyle,
+    timeoutAnimatedStyle,
   }
 }

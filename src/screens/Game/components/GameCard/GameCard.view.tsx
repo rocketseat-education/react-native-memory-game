@@ -15,6 +15,7 @@ export const GameCardView: FC<ReturnType<typeof useGameCardViewModel>> = ({
   entry,
   shakeAnimatedStyle,
   successAnimatedStyle,
+  timeoutAnimatedStyle,
 }) => {
   const {
     animatedStyle: selectionAnimatedStyle,
@@ -30,6 +31,7 @@ export const GameCardView: FC<ReturnType<typeof useGameCardViewModel>> = ({
         selectionAnimatedStyle,
         shakeAnimatedStyle,
         successAnimatedStyle,
+        timeoutAnimatedStyle,
       ]}
     >
       <Pressable
