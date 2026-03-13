@@ -4,6 +4,7 @@ import { StyleSheet, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { CardGrid } from './components/CardGrid'
 import { CountdownOverlay } from './components/CountdownOverlay'
+import { DefeatModalView } from './components/DefeatModal/DefeatModal.view'
 import { GameHeaderView } from './components/GameHeader/GameHeader.view'
 import { useGameViewModel } from './useGame.viewModel'
 
@@ -28,6 +29,12 @@ export const GameView = () => {
       <CountdownOverlay
         countdownVisible={countdownVisible}
         onComplete={handleCountdownComplete}
+      />
+
+      <DefeatModalView
+        visible={true}
+        onTryAgain={() => {}}
+        onGoHome={() => {}}
       />
     </SafeAreaView>
   )
