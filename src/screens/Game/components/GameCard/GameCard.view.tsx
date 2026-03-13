@@ -13,18 +13,21 @@ export const GameCardView: FC<ReturnType<typeof useGameCardViewModel>> = ({
   backAnimatedStyle,
   selectCard,
   entry,
+  shakeAnimatedStyle,
 }) => {
   const {
     animatedStyle: selectionAnimatedStyle,
     onPressIn,
     onPressOut,
   } = useCardSelectionAnimation()
+
   return (
     <Animated.View
       style={[
         styles.containerWrapper,
         entry.animatedStyle,
         selectionAnimatedStyle,
+        shakeAnimatedStyle,
       ]}
     >
       <Pressable

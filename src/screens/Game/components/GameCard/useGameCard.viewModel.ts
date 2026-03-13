@@ -1,7 +1,8 @@
 import { useCardEntryAnimation } from '@/animations/hooks/useCardEntryAnimation'
+import { useCardShakeAnimation } from '@/animations/hooks/useCardShakeAnimation'
 import { useGameStore } from '@/shared/stores/game.store'
 import { StoreCard } from '@/shared/utils/challenge'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import {
   interpolate,
   useAnimatedStyle,
@@ -21,6 +22,10 @@ export const useGameCardViewModel = ({ card, index }: Props) => {
 
   const entry = useCardEntryAnimation({ cardIndex: index })
 
+  const { animatedStyle: shakeAnimatedStyle, onShake } = useCardShakeAnimation()
+
+  const previousFlippedRef = useRef(card.isFlipped)
+
   const frontAnimatedStyle = useAnimatedStyle(() => ({
     transform: [
       { perspective: 1000 },
@@ -39,5 +44,19 @@ export const useGameCardViewModel = ({ card, index }: Props) => {
     rotation.value = withSpring(card.isFlipped ? 180 : 0, { duration: 300 })
   }, [card.isFlipped, rotation])
 
-  return { card, frontAnimatedStyle, backAnimatedStyle, selectCard, entry }
+  useEffect(() => {
+    if (card.isFlipped === false && previousFlippedRef.current === true) {
+      onShake()
+    }
+    previousFlippedRef.current = card.isFlipped
+  }, [card.isFlipped, onShake, previousFlippedRef])
+
+  return {
+    card,
+    frontAnimatedStyle,
+    backAnimatedStyle,
+    selectCard,
+    entry,
+    shakeAnimatedStyle,
+  }
 }
