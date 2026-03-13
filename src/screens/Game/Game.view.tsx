@@ -4,6 +4,7 @@ import { StyleSheet, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { CardGrid } from './components/CardGrid'
 import { CountdownOverlay } from './components/CountdownOverlay'
+import { GameHeaderView } from './components/GameHeader/GameHeader.view'
 import { useGameViewModel } from './useGame.viewModel'
 
 export const GameView = () => {
@@ -11,6 +12,7 @@ export const GameView = () => {
     useGameViewModel()
   return (
     <SafeAreaView style={styles.container}>
+      <GameHeaderView />
       <View style={styles.gameInfo}>
         <AppText style={styles.title}>{selectedTheme?.title}</AppText>
         <AppText style={styles.subtitle}>
