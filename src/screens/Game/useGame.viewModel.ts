@@ -100,16 +100,6 @@ export const useGameViewModel = () => {
     themeId,
   ])
 
-  const handleTryAgain = useCallback(() => {
-    setIsTimeoutModalVisible(false)
-    resetGame()
-
-    createSequence()
-      .wait(300)
-      .then(() => setCountdownVisible(true))
-      .run()
-  }, [resetGame, setCountdownVisible])
-
   const handleGoBack = () => {
     router.back()
   }
@@ -134,6 +124,16 @@ export const useGameViewModel = () => {
         .run()
     }
   }, [status])
+
+  const handleTryAgain = useCallback(() => {
+    setIsTimeoutModalVisible(false)
+    resetGame()
+
+    createSequence()
+      .wait(300)
+      .then(() => setCountdownVisible(true))
+      .run()
+  }, [resetGame, setCountdownVisible])
 
   return {
     selectedTheme,

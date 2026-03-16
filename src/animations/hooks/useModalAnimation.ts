@@ -1,9 +1,11 @@
-import { useEffect } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 import {
   useAnimatedStyle,
   useSharedValue,
   withSpring,
+  withTiming,
 } from 'react-native-reanimated'
+import { runOnJS } from 'react-native-worklets'
 import { SPRING_CONFIG } from '../config/animation.config'
 
 interface Params {
@@ -29,7 +31,33 @@ export const useModalAnimation = ({ visible }: Params) => {
     opacity: opacity.value,
   }))
 
+  const pendingCallbackRef = useRef<(() => void) | null>(null)
+
+  const executeCallback = useCallback(() => {
+    if (pendingCallbackRef.current) {
+      pendingCallbackRef.current()
+      pendingCallbackRef.current = null
+    }
+  }, [])
+
+  const close = useCallback(
+    (callback: () => void) => {
+      pendingCallbackRef.current = callback
+
+      const exitDuration = 300
+
+      translateY.value = withSpring(1000, { duration: exitDuration })
+      opacity.value = withTiming(0, { duration: exitDuration }, (finished) => {
+        if (finished) {
+          runOnJS(executeCallback)()
+        }
+      })
+    },
+    [executeCallback, opacity, translateY],
+  )
+
   return {
     animatedStyle,
+    close,
   }
 }
