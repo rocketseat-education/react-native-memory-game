@@ -25,6 +25,7 @@ export const useGameViewModel = () => {
     startGame,
     cards,
     resetGame,
+    clearGame,
   } = useGameStore()
 
   const { entryAnimationType, setShouldAnimate, setEntryAnimationType } =
@@ -127,13 +128,19 @@ export const useGameViewModel = () => {
 
   const handleTryAgain = useCallback(() => {
     setIsTimeoutModalVisible(false)
+    setShouldAnimate(false)
     resetGame()
 
     createSequence()
       .wait(300)
       .then(() => setCountdownVisible(true))
       .run()
-  }, [resetGame, setCountdownVisible])
+  }, [resetGame, setCountdownVisible, setShouldAnimate])
+
+  const handleGoHome = () => {
+    clearGame()
+    router.replace('/(private)/home')
+  }
 
   return {
     selectedTheme,
@@ -143,5 +150,6 @@ export const useGameViewModel = () => {
     isTimeoutModalVisible,
     handleTryAgain,
     handleExit,
+    handleGoHome,
   }
 }
