@@ -7,6 +7,7 @@ import { CountdownOverlay } from './components/CountdownOverlay'
 import { DefeatModalView } from './components/DefeatModal/DefeatModal.view'
 import { ExitConfirmationModalView } from './components/ExitConfirmationModal/ExitConfirmationModal.view'
 import { GameHeaderView } from './components/GameHeader/GameHeader.view'
+import { VictoryModalView } from './components/VictoryModal/VictoryModal.view'
 import { useGameViewModel } from './useGame.viewModel'
 
 export const GameView = () => {
@@ -21,6 +22,7 @@ export const GameView = () => {
     handleOpenExitModal,
     handleConfirmExit,
     handleCancelExit,
+    showVictoryModal,
   } = useGameViewModel()
   return (
     <SafeAreaView style={styles.container}>
@@ -48,6 +50,12 @@ export const GameView = () => {
         visible={showExitModal}
         onConfirm={handleConfirmExit}
         onCancel={handleCancelExit}
+      />
+
+      <VictoryModalView
+        visible={showVictoryModal}
+        onPlayAgain={handleTryAgain}
+        onGoHistory={handleConfirmExit}
       />
     </SafeAreaView>
   )

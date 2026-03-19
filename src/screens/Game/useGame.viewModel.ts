@@ -112,9 +112,12 @@ export const useGameViewModel = () => {
       .run()
   }, [])
 
+  const [showExitModal, setShowExitModal] = useState(false)
+  const [showVictoryModal, setShowVictoryModal] = useState(false)
+
   useEffect(() => {
     if (status === 'finished') {
-      // TODO: Implement victory modal
+      setShowVictoryModal(true)
     }
     if (status === 'timeout') {
       createSequence()
@@ -126,6 +129,7 @@ export const useGameViewModel = () => {
 
   const handleTryAgain = useCallback(() => {
     setIsTimeoutModalVisible(false)
+    setShowVictoryModal(false)
     setShouldAnimate(false)
     resetGame()
 
@@ -140,8 +144,6 @@ export const useGameViewModel = () => {
     router.replace('/(private)/home')
   }
 
-  const [showExitModal, setShowExitModal] = useState(false)
-
   const handleOpenExitModal = () => {
     if (status === 'playing') {
       pauseGame()
@@ -149,16 +151,16 @@ export const useGameViewModel = () => {
     }
   }
 
-  const handleConfirmExit = () => {
+  const handleConfirmExit = useCallback(() => {
     setShowExitModal(false)
     resetGame()
     router.replace('/(private)/home')
-  }
+  }, [resetGame])
 
-  const handleCancelExit = () => {
+  const handleCancelExit = useCallback(() => {
     resumeGame()
     setShowExitModal(false)
-  }
+  }, [resumeGame])
 
   return {
     selectedTheme,
@@ -172,5 +174,6 @@ export const useGameViewModel = () => {
     handleOpenExitModal,
     handleConfirmExit,
     handleCancelExit,
+    showVictoryModal,
   }
 }
