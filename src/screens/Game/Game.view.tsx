@@ -5,6 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { CardGrid } from './components/CardGrid'
 import { CountdownOverlay } from './components/CountdownOverlay'
 import { DefeatModalView } from './components/DefeatModal/DefeatModal.view'
+import { ExitConfirmationModalView } from './components/ExitConfirmationModal/ExitConfirmationModal.view'
 import { GameHeaderView } from './components/GameHeader/GameHeader.view'
 import { useGameViewModel } from './useGame.viewModel'
 
@@ -13,15 +14,17 @@ export const GameView = () => {
     selectedTheme,
     countdownVisible,
     handleCountdownComplete,
-    handleGoBack,
     isTimeoutModalVisible,
     handleTryAgain,
-    handleExit,
     handleGoHome,
+    showExitModal,
+    handleOpenExitModal,
+    handleConfirmExit,
+    handleCancelExit,
   } = useGameViewModel()
   return (
     <SafeAreaView style={styles.container}>
-      <GameHeaderView onGoBack={handleGoBack} />
+      <GameHeaderView onGoBack={handleOpenExitModal} />
       <View style={styles.gameInfo}>
         <AppText style={styles.title}>{selectedTheme?.title}</AppText>
         <AppText style={styles.subtitle}>
@@ -39,6 +42,12 @@ export const GameView = () => {
         visible={isTimeoutModalVisible}
         onTryAgain={handleTryAgain}
         onGoHome={handleGoHome}
+      />
+
+      <ExitConfirmationModalView
+        visible={showExitModal}
+        onConfirm={handleConfirmExit}
+        onCancel={handleCancelExit}
       />
     </SafeAreaView>
   )

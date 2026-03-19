@@ -26,6 +26,8 @@ export const useGameViewModel = () => {
     cards,
     resetGame,
     clearGame,
+    pauseGame,
+    resumeGame,
   } = useGameStore()
 
   const { entryAnimationType, setShouldAnimate, setEntryAnimationType } =
@@ -101,10 +103,6 @@ export const useGameViewModel = () => {
     themeId,
   ])
 
-  const handleGoBack = () => {
-    router.back()
-  }
-
   const handleExit = useCallback(() => {
     setIsTimeoutModalVisible(false)
 
@@ -142,14 +140,37 @@ export const useGameViewModel = () => {
     router.replace('/(private)/home')
   }
 
+  const [showExitModal, setShowExitModal] = useState(false)
+
+  const handleOpenExitModal = () => {
+    if (status === 'playing') {
+      pauseGame()
+      setShowExitModal(true)
+    }
+  }
+
+  const handleConfirmExit = () => {
+    setShowExitModal(false)
+    resetGame()
+    router.replace('/(private)/home')
+  }
+
+  const handleCancelExit = () => {
+    resumeGame()
+    setShowExitModal(false)
+  }
+
   return {
     selectedTheme,
     countdownVisible,
     handleCountdownComplete,
-    handleGoBack,
     isTimeoutModalVisible,
     handleTryAgain,
     handleExit,
     handleGoHome,
+    showExitModal,
+    handleOpenExitModal,
+    handleConfirmExit,
+    handleCancelExit,
   }
 }
