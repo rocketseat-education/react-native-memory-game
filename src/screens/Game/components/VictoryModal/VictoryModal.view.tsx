@@ -2,6 +2,7 @@ import { useModalAnimation } from '@/animations/hooks/useModalAnimation'
 import { usePressAnimation } from '@/animations/hooks/usePressAnimation'
 import { colors, gradients } from '@/constants/colors'
 import { AppText } from '@/shared/components/AppText'
+import { useGameStore } from '@/shared/stores/game.store'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { BlurView } from 'expo-blur'
 import { LinearGradient } from 'expo-linear-gradient'
@@ -22,6 +23,12 @@ export const VictoryModalView: FC<Params> = ({
   onPlayAgain,
   onGoHistory,
 }) => {
+  const { timeElapsed } = useGameStore()
+  const minutes = Math.floor(timeElapsed / 60)
+  const seconds = timeElapsed % 60
+
+  const timeString = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`
+
   const { close, animatedStyle } = useModalAnimation({ visible })
   const {
     onPressIn,
@@ -52,7 +59,9 @@ export const VictoryModalView: FC<Params> = ({
             color={colors.accent.lightPurple}
           />
 
-          <AppText style={styles.title}>Você concluiu o desafio em {}</AppText>
+          <AppText style={styles.title}>
+            Você concluiu o desafio em {timeString}
+          </AppText>
 
           <View style={styles.buttonGlow}>
             <Animated.View style={[playAgainAnimatedStyle]}>
