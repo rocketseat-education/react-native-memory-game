@@ -31,6 +31,17 @@ export const ConfettiEffectView: FC<ConfettiEffectProps> = ({
 
   useEffect(() => {
     if (active) {
+      idCounterRef.current = 0
+
+      const burstPieces: ConfettiConfig[] = Array.from(
+        { length: burstCount },
+        () => {
+          idCounterRef.current += 1
+          return createConfettiPiece(idCounterRef.current, true)
+        },
+      )
+      setPieces(burstPieces)
+
       intervalRef.current = setInterval(() => {
         const newPieces: ConfettiConfig[] = Array.from(
           { length: continuousCount },
@@ -43,8 +54,23 @@ export const ConfettiEffectView: FC<ConfettiEffectProps> = ({
       }, continuousInterval)
 
       cleanupRef.current = setInterval(cleanup, 2000)
+    } else {
+      setPieces([])
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current)
+        intervalRef.current = null
+      }
+      if (cleanupRef.current) {
+        clearInterval(cleanupRef.current)
+        cleanupRef.current = null
+      }
     }
-  }, [active])
+
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current)
+      if (cleanupRef.current) clearInterval(cleanupRef.current)
+    }
+  }, [active, burstCount, cleanup, continuousCount, continuousInterval])
 
   return <View></View>
 }
