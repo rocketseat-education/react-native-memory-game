@@ -3,8 +3,9 @@ import { AppText } from '@/shared/components/AppText'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { router } from 'expo-router'
 import { FC } from 'react'
-import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native'
+import { FlatList, Pressable, StyleSheet, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import { MatchHistoryCardView } from './components/MatchHistoryCard/MatchHistoryCard.view'
 import { useHistoryViewModel } from './useHistory.viewModel'
 
 export const HistoryView: FC<ReturnType<typeof useHistoryViewModel>> = ({
@@ -31,14 +32,9 @@ export const HistoryView: FC<ReturnType<typeof useHistoryViewModel>> = ({
       <View style={styles.contentContainer}>
         <FlatList
           data={matches}
-          renderItem={({ item }) => (
-            <View>
-              <Text style={{ color: colors.grayscale.gray100 }}>
-                {item.category}
-              </Text>
-            </View>
-          )}
+          renderItem={({ item }) => <MatchHistoryCardView match={item} />}
           keyExtractor={({ id }) => `score-${id}`}
+          style={{ width: '100%' }}
         />
       </View>
     </SafeAreaView>
