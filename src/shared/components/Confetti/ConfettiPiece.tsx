@@ -1,3 +1,4 @@
+import { ConfettiShapeType } from '@/shared/utils/confetti'
 import { FC, useEffect } from 'react'
 import { Dimensions, StyleProp, StyleSheet, ViewStyle } from 'react-native'
 import Animated, {
@@ -8,8 +9,6 @@ import Animated, {
   withDelay,
   withTiming,
 } from 'react-native-reanimated'
-
-export type ConfettiShapeType = 'square' | 'rectangle' | 'circle'
 
 interface ConfettiPieceProps {
   color: string
