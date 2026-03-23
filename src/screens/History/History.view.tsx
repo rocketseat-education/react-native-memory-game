@@ -8,7 +8,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { useHistoryViewModel } from './useHistory.viewModel'
 
 export const HistoryView: FC<ReturnType<typeof useHistoryViewModel>> = ({
-  scores,
+  matches,
 }) => {
   return (
     <SafeAreaView style={styles.container}>
@@ -25,10 +25,12 @@ export const HistoryView: FC<ReturnType<typeof useHistoryViewModel>> = ({
         </Pressable>
 
         <AppText style={styles.headerTitle}>Histórico de partidas</AppText>
+
+        <View style={styles.emptyButton} />
       </View>
       <View style={styles.contentContainer}>
         <FlatList
-          data={scores}
+          data={matches}
           renderItem={({ item }) => (
             <View>
               <Text style={{ color: colors.grayscale.gray100 }}>
@@ -59,6 +61,7 @@ const styles = StyleSheet.create({
   headerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
     paddingHorizontal: 24,
     paddingBottom: 30,
   },
@@ -66,7 +69,7 @@ const styles = StyleSheet.create({
   backButton: {
     width: 40,
     height: 40,
-    borderRadius: 24,
+    borderRadius: '50%',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 16,
@@ -78,5 +81,12 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontFamily: 'Baloo2_800ExtraBold',
     color: colors.grayscale.gray100,
+  },
+  emptyButton: {
+    width: 40,
+    height: 40,
+    borderRadius: '50%',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 })
