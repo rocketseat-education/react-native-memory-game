@@ -1,6 +1,15 @@
 import { FC, useEffect } from 'react'
-import { Easing, View } from 'react-native'
-import { useSharedValue, withDelay, withTiming } from 'react-native-reanimated'
+import { Dimensions, StyleProp, StyleSheet, ViewStyle } from 'react-native'
+import Animated, {
+  Easing,
+  interpolate,
+  useAnimatedStyle,
+  useSharedValue,
+  withDelay,
+  withTiming,
+} from 'react-native-reanimated'
+
+export type ConfettiShapeType = 'square' | 'rectangle' | 'circle'
 
 interface ConfettiPieceProps {
   color: string
@@ -8,11 +17,34 @@ interface ConfettiPieceProps {
   delay: number
   duration: number
   size: number
-  shape: 'square' | 'rectangle' | 'circle'
+  shape: ConfettiShapeType
   swingDirection: number
   swingAmount: number
   rotationSpeed: number
 }
+
+const confettiShapeType: (
+  size: number,
+  shape: ConfettiShapeType,
+) => StyleProp<ViewStyle> | undefined = (size, shape) => {
+  const shapeStyles = {
+    circle: {
+      borderRadius: size / 2,
+    },
+    rectangle: {
+      width: size * 0.4,
+      height: size * 0.4,
+    },
+    square: {
+      width: size,
+      height: size,
+    },
+  }
+
+  return shapeStyles[shape]
+}
+
+const { height: SCREEN_HEIGHT } = Dimensions.get('window')
 
 export const ConfettiPieceComponent: FC<ConfettiPieceProps> = ({
   color,
@@ -41,7 +73,37 @@ export const ConfettiPieceComponent: FC<ConfettiPieceProps> = ({
         easing: Easing.linear,
       }),
     )
-  }, [])
+  }, [delay, duration, progress, rotateZ, rotationSpeed, swingDirection])
 
-  return <View />
+  const animatedStyle = useAnimatedStyle(() => {
+    const translateY = interpolate(
+      progress.value,
+      [0, 1],
+      [-50, SCREEN_HEIGHT + 100],
+    )
+    const swingPhase = progress.value * Math.PI * 6
+    const translateX = Math.sin(swingPhase) * swingAmount * swingDirection
+
+    return {
+      transform: [
+        { translateX },
+        { translateY },
+        { rotateZ: `${rotateZ.value}deg` },
+      ],
+      opacity: interpolate(progress.value, [0, 0.05, 0.9, 1], [0, 1, 1, 0]),
+    }
+  })
+
+  return (
+    <Animated.View
+      style={[styles.piece, animatedStyle, confettiShapeType(size, shape)]}
+    />
+  )
 }
+
+const styles = StyleSheet.create({
+  piece: {
+    position: 'absolute',
+    top: 0,
+  },
+})
