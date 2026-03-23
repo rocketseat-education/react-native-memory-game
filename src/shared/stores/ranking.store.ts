@@ -45,7 +45,11 @@ export const useRankingStore = create<RankingStore>()(
           }),
         }))
       },
-      deleteScore: () => {},
+      deleteScore: (id) => {
+        set((state) => ({
+          scores: state.scores.filter(({ id: scoreId }) => scoreId !== id),
+        }))
+      },
     }),
     {
       name: '@memory-game:scores',
