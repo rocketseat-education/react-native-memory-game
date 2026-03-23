@@ -1,4 +1,4 @@
-import { ConfettiConfig } from '@/shared/utils/confetti'
+import { ConfettiConfig, createConfettiPiece } from '@/shared/utils/confetti'
 import { FC, useCallback, useEffect, useRef, useState } from 'react'
 import { View } from 'react-native'
 
@@ -31,6 +31,17 @@ export const ConfettiEffectView: FC<ConfettiEffectProps> = ({
 
   useEffect(() => {
     if (active) {
+      intervalRef.current = setInterval(() => {
+        const newPieces: ConfettiConfig[] = Array.from(
+          { length: continuousCount },
+          () => {
+            idCounterRef.current += 1
+            return createConfettiPiece(idCounterRef.current, false)
+          },
+        )
+        setPieces((prevValues) => [...prevValues, ...newPieces])
+      }, continuousInterval)
+
       cleanupRef.current = setInterval(cleanup, 2000)
     }
   }, [active])
