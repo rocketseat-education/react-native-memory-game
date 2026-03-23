@@ -1,5 +1,5 @@
 import { ConfettiShapeType } from '@/shared/utils/confetti'
-import { FC, useEffect } from 'react'
+import { FC, memo, useEffect } from 'react'
 import { Dimensions, StyleProp, StyleSheet, ViewStyle } from 'react-native'
 import Animated, {
   Easing,
@@ -95,10 +95,17 @@ export const ConfettiPieceComponent: FC<ConfettiPieceProps> = ({
 
   return (
     <Animated.View
-      style={[styles.piece, animatedStyle, confettiShapeType(size, shape)]}
+      style={[
+        styles.piece,
+        animatedStyle,
+        confettiShapeType(size, shape),
+        { left: startX, backgroundColor: color, width: size, height: size },
+      ]}
     />
   )
 }
+
+export const ConfettiPiece = memo(ConfettiPieceComponent)
 
 const styles = StyleSheet.create({
   piece: {

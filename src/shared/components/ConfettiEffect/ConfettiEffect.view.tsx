@@ -1,6 +1,7 @@
 import { ConfettiConfig, createConfettiPiece } from '@/shared/utils/confetti'
 import { FC, useCallback, useEffect, useRef, useState } from 'react'
-import { View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
+import { ConfettiPiece } from '../Confetti/ConfettiPiece'
 
 interface ConfettiEffectProps {
   active: boolean
@@ -72,5 +73,32 @@ export const ConfettiEffectView: FC<ConfettiEffectProps> = ({
     }
   }, [active, burstCount, cleanup, continuousCount, continuousInterval])
 
-  return <View></View>
+  if (!active && pieces.length === 0) return null
+
+  return (
+    <View style={styles.container} pointerEvents="none">
+      {pieces.map((confetti) => (
+        <ConfettiPiece
+          color={confetti.color}
+          delay={confetti.delay}
+          duration={confetti.duration}
+          rotationSpeed={confetti.rotationSpeed}
+          size={confetti.size}
+          shape={confetti.shape}
+          startX={confetti.startX}
+          swingAmount={confetti.swingAmount}
+          swingDirection={confetti.swingDirection}
+          key={confetti.id}
+        />
+      ))}
+    </View>
+  )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    ...StyleSheet.absoluteFillObject,
+    overflow: 'hidden',
+    zIndex: 1000,
+  },
+})
