@@ -1,5 +1,5 @@
 import { ConfettiConfig } from '@/shared/utils/confetti'
-import { FC, useRef, useState } from 'react'
+import { FC, useCallback, useEffect, useRef, useState } from 'react'
 import { View } from 'react-native'
 
 interface ConfettiEffectProps {
@@ -20,6 +20,20 @@ export const ConfettiEffectView: FC<ConfettiEffectProps> = ({
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const cleanupRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const idCounterRef = useRef(0)
+
+  const cleanup = useCallback(() => {
+    const now = Date.now()
+    const maxLifetime = 6000
+    setPieces((prev) =>
+      prev.filter((piece) => now - piece.createdAt < maxLifetime),
+    )
+  }, [])
+
+  useEffect(() => {
+    if (active) {
+      cleanupRef.current = setInterval(cleanup, 2000)
+    }
+  }, [active])
 
   return <View></View>
 }
