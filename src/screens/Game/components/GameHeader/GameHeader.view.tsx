@@ -22,7 +22,7 @@ export const GameHeaderView: FC<GameHeaderViewProps> = ({ onGoBack }) => {
 
   const { animatedStyle, onPressIn, onPressOut } = usePressAnimation({
     scaleActive: 0.8,
-    width: 48,
+    width: 40,
   })
   return (
     <View style={styles.container}>
@@ -33,8 +33,8 @@ export const GameHeaderView: FC<GameHeaderViewProps> = ({ onGoBack }) => {
         onPress={onGoBack}
       >
         <MaterialCommunityIcons
-          name="chevron-left"
-          size={32}
+          name="arrow-left"
+          size={20}
           color={colors.grayscale.gray100}
         />
       </AnimatedPressable>

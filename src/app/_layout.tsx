@@ -17,7 +17,7 @@ export default function RootLayout() {
     Baloo2_800ExtraBold,
   })
   return (
-    <GestureHandlerRootView>
+    <GestureHandlerRootView style={{ flex: 1 }}>
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="(public)" />
         <Stack.Screen name="(private)" />
